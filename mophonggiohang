@@ -1,0 +1,166 @@
+  1 //DO AN MON HOC LAP TRINH HUONG DOI TUONG
+  2 //Hoc ky: 2 - Nam hoc: 2024-2025
+  3 //De: 06
+  4 //Nhom: 14
+  5
+  6 //Thanh vien:
+  7 //Le Hoang Tung - 687862 - K68CNTTA - Nhom truong
+  8 //Tran Dinh Dat - 687576 - K68CNTTA
+  9 //Nguyen Dinh Duc Son - 687791 - K68CNTTA
+ 10
+ 11 /*
+ 12 De bai:
+ 13 */
+ 14
+ 15 #include<iostream>
+ 16 #include<stdio.h>
+ 17
+ 18 using namespace std;
+ 19
+ 20 //Khai bao lop doi tuong DSLKD
+ 21 class GioHang
+ 22 {
+ 23     private:
+ 24         struct SP
+ 25         {
+ 26             string ten;
+ 27             float donGia;
+ 28             int soLuong;
+ 29             SP *next;
+ 30         } *F;
+ 31
+ 32     public:
+ 33         GioHang();
+ 34         ~GioHang();
+ 35         void themSP(string ten, float gia, int sl);
+ 36         void hienThiGioHang();
+ 37         bool xoaSP(string ten);
+ 38         double tinhTongTien();
+ 39 };
+ 40
+ 41 //===chuong trinh chinh===
+ 42 int main()
+ 43 {
+ 44
+ 45     cout<<endl;
+ 46     return 0;
+ 47 }
+ 48 //===dinh nghia ham===
+ 49 GioHang::GioHang():F(NULL)
+ 50 {
+ 51
+ 52 }
+ 53
+ 54 GioHang::~GioHang()
+ 55 {
+ 56     while(F)
+ 57         {
+ 58             SP *P = F;
+ 59             F = F->next;
+ 60             delete P;
+ 61         }
+ 62 }
+ 63
+ 64 void GioHang::themSP(string ten, float gia, int sl)
+ 65 {
+ 66     //Kiem tra san pham da co thi cong don so luong vao
+ 67     SP *p = F;
+ 68     while(p)
+ 69          {
+ 70             if(p -> ten == ten)
+ 71             {
+ 72                 p -> soLuong += sl;
+ 73                 return; //khong update nua
+ 74             }
+ 75                 p = p -> next;
+ 76          }
+ 77
+ 78
+ 79     //Tao san pham moi
+ 80     SP *N = new SP;
+ 81     N -> ten = ten;
+ 82     N -> soLuong = sl;
+ 83     N -> donGia = gia;
+ 84     N -> next = NULL;
+ 85
+ 86     //Them vao cuoi danh sach
+ 87     if (F == NULL)
+ 88         F = N;
+ 89     else
+ 90         {
+ 91             SP *P = F;
+ 92             while (P->next) P = P -> next;
+ 93             P -> next = N;
+ 94         }
+ 95 }
+ 96
+ 97 void GioHang::hienThiGioHang()
+ 98 {
+ 99     if(F == NULL)
+100     {
+101         cout<<"Gio hang trong\n";
+102         return;
+103     }
+104
+105     SP *p = F;
+106     cout<<"Ten SP\t\tDon  gia\t\tSo luong\tThanh tien\n";
+107     while(p)
+108     {
+109         double thanhTien = p -> donGia * p -> soLuong;
+110         cout<<p-> ten<<"\t\t"<<p->donGia<<"\t\t"<<p->soLuong<<"\t\t"<<thanhTien<<endl;
+111         p = p -> next;
+112     }
+113
+114 }
+115
+116 bool GioHang::xoaSP(string ten)
+117 {
+118     //Duyet danh sach tu dau
+119     SP *p = F;
+120
+121     //Luu nut dung truoc p
+122     SP *head = NULL;
+123
+124     //Tim nut co ten san pham can xoa
+125     while (p != NULL)
+126     {
+127         if(p->ten == ten)
+128             {
+129                 break; //tim thay thi dung
+130             }
+131         head = p; //cap nhat nut truoc
+132         p = p->next; // nut tiep theo
+133     }
+134
+135     if(p == NULL)
+136     {
+137         //Khong tim thay thi tra ve
+138         return false;
+139     }
+140
+141     //Xoa nut
+142     if(head == NULL)
+143     {
+144         //Xoa nut dau danh sach
+145         F = p->next;
+146     } else
+147     {
+148         //Khong phai nut dau noi nut truoc voi nut sau p
+149         head->next = p->next;
+150     }
+151
+152     delete p;
+153     return true;
+154 }
+155
+156 double GioHang::tinhTongTien()
+157 {
+158     double tong = 0;
+159     SP *p = F;
+160     while(p)
+161         {
+162             tong += p->donGia * p->soLuong;
+163             p = p->next;
+164         }
+165     return tong;
+166 }
